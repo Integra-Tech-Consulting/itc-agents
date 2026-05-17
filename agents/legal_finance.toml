@@ -6,7 +6,7 @@ icon = "⚖️"
 agent_type = "monitor_operative"
 schedule_type = "interval"
 schedule_value = "21600"
-tools = ["file_read", "file_write", "stripe_create_invoice", "stripe_list_invoices", "stripe_send_reminder", "gmail_draft", "gmail_send", "memory_store", "memory_retrieve", "think", "policy_check", "agent_handoff"]
+tools = ["file_read", "file_write", "stripe_create_invoice", "stripe_list_invoices", "stripe_send_reminder", "paypal_create_invoice_draft", "paypal_send_invoice", "paypal_list_invoices", "paypal_get_invoice", "paypal_get_subscription", "paypal_list_subscription_transactions", "paypal_cancel_subscription", "paypal_verify_webhook", "gmail_draft", "gmail_send", "memory_store", "memory_retrieve", "think", "policy_check", "agent_handoff"]
 max_turns = 10
 temperature = 0.1
 memory_extraction = "scratchpad"
@@ -24,11 +24,13 @@ system_prompt_template = """You are the ITC Legal & Finance agent. You handle pa
 
 ## Hard rules
 1. You NEVER sign anything. You draft, then queue for human signature.
-2. You NEVER move money. Stripe operations create invoices and reminders, NEVER charge.
+2. You NEVER move money. Stripe AND PayPal operations create/send invoices and reminders, NEVER charge or refund. `paypal_capture_order`, `paypal_refund_capture`, `paypal_create_payout` are forbidden by policy.
 3. Every contract draft must reference the standard ITC template by hash. No free-form contracts.
 4. Every invoice must have: deal_id, milestone_id, amount, currency, VAT, due_date.
-5. Every dunning email requires `policy_check` and is queued for review.
-6. Tax / labor / regulated questions → mark "REQUIRES_EXTERNAL_COUNSEL", do not answer.
+5. Every dunning email and every invoice send (Stripe or PayPal) requires `policy_check` and is queued for review.
+6. PayPal subscription cancellations are destructive — always human-gated via `policy_check`. Use `paypal_get_subscription` first to confirm the right one.
+7. PayPal webhooks MUST be validated with `paypal_verify_webhook` before any side effect is taken.
+8. Tax / labor / regulated questions → mark "REQUIRES_EXTERNAL_COUNSEL", do not answer.
 
 ## Quality bar
 - 0 contracts sent without legal template hash.
@@ -41,11 +43,14 @@ system_prompt_template = """You are the ITC Legal & Finance agent. You handle pa
 targets = ["commercial", "delivery_pm", "governance"]
 
 [guardrails]
-forbidden_tools = ["github_create_pr", "shell_exec", "hubspot_update_deal"]
+forbidden_tools = ["github_create_pr", "shell_exec", "hubspot_update_deal", "paypal_capture_order", "paypal_refund_capture", "paypal_create_payout"]
 require_human_approval = true
-approval_required_for = ["gmail_send", "stripe_create_invoice", "stripe_send_reminder"]
+approval_required_for = ["gmail_send", "stripe_create_invoice", "stripe_send_reminder", "paypal_send_invoice", "paypal_cancel_subscription"]
 daily_budget_usd = 3.0
 forbidden_actions = ["sign_contract", "transfer_money", "answer_regulated_legal_question"]
+# Live-mode money caps; agent must escalate above these.
+paypal_live_amount_human_approval_threshold_cents = 1000000  # €10,000
+stripe_live_amount_human_approval_threshold_cents = 1000000  # €10,000
 
 [kpis]
 dso_days_max = 35

@@ -77,10 +77,60 @@ LINEAR_API_KEY=
 GMAIL_OAUTH_CLIENT_ID=
 GMAIL_OAUTH_CLIENT_SECRET=
 GMAIL_OAUTH_REFRESH_TOKEN=
+PAYPAL_CLIENT_ID=
+PAYPAL_CLIENT_SECRET=
+PAYPAL_WEBHOOK_ID=
+PAYPAL_MODE=live
+PAYPAL_API_BASE=https://api-m.paypal.com
 GITHUB_BOT_TOKEN=
 ITC_AGENTS_DISABLED=false
 ITC_REQUIRE_HUMAN_APPROVAL=true
 EOF
+    chmod 600 "$SECRETS"
+fi
+
+# ─── 5b. Seed PayPal creds from /root/.itc-agents/paypal.env if present ──
+# Operator places a `paypal.env` shell-style file (KEY=value lines, no quotes)
+# in /root/.itc-agents/ before running this script. We DO NOT try to parse the
+# legacy `paypal_config.txt` (which is Python code, not a KEY=VAL env file).
+PAYPAL_SRC="${PAYPAL_ENV_FILE:-/root/.itc-agents/paypal.env}"
+if [[ -f "$PAYPAL_SRC" ]]; then
+    log "seeding PayPal creds from $PAYPAL_SRC into $SECRETS"
+    python3 - "$PAYPAL_SRC" "$SECRETS" <<'PYEOF'
+import re, sys, pathlib
+src = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8", errors="replace")
+dst_path = pathlib.Path(sys.argv[2])
+dst = dst_path.read_text(encoding="utf-8")
+wanted = {}
+for line in src.splitlines():
+    line = line.strip()
+    if not line or line.startswith("#"):
+        continue
+    m = re.match(r'^([A-Z_]+)\s*=\s*"?([^"\r\n]*)"?\s*$', line)
+    if not m:
+        continue
+    name, value = m.group(1), m.group(2).strip()
+    if name.startswith("PAYPAL_") and value:
+        wanted[name] = value
+changed = False
+for name, value in wanted.items():
+    pattern = re.compile(rf'^{re.escape(name)}=.*$', re.MULTILINE)
+    if pattern.search(dst):
+        def _sub(m, _v=value, _n=name):
+            current = m.group(0).split("=", 1)[1]
+            return f"{_n}={_v}" if not current.strip() else m.group(0)
+        new_dst, _ = pattern.subn(_sub, dst, count=1)
+        if new_dst != dst:
+            dst, changed = new_dst, True
+    else:
+        dst += f"\n{name}={value}"
+        changed = True
+if changed:
+    dst_path.write_text(dst, encoding="utf-8")
+    print("paypal creds seeded")
+else:
+    print("paypal creds already present, no changes")
+PYEOF
     chmod 600 "$SECRETS"
 fi
 

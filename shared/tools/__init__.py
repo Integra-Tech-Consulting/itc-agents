@@ -8,7 +8,14 @@ from __future__ import annotations
 
 from typing import Callable, Dict
 
-from . import crm_hubspot, gmail_outbound, github_admin, linear_pm, stripe_billing
+from . import (
+    crm_hubspot,
+    github_admin,
+    gmail_outbound,
+    linear_pm,
+    paypal_billing,
+    stripe_billing,
+)
 from .policy import policy_check
 
 REGISTRY: Dict[str, Callable] = {
@@ -21,6 +28,15 @@ REGISTRY: Dict[str, Callable] = {
     "stripe_create_invoice": stripe_billing.create_invoice,
     "stripe_list_invoices": stripe_billing.list_invoices,
     "stripe_send_reminder": stripe_billing.send_reminder,
+    # PayPal (invoice + subscription read/cancel + webhook verify; no capture/refund)
+    "paypal_create_invoice_draft": paypal_billing.create_invoice_draft,
+    "paypal_send_invoice": paypal_billing.send_invoice,
+    "paypal_list_invoices": paypal_billing.list_invoices,
+    "paypal_get_invoice": paypal_billing.get_invoice,
+    "paypal_get_subscription": paypal_billing.get_subscription,
+    "paypal_list_subscription_transactions": paypal_billing.list_subscription_transactions,
+    "paypal_cancel_subscription": paypal_billing.cancel_subscription,
+    "paypal_verify_webhook": paypal_billing.verify_webhook,
     # Linear
     "linear_create_project": linear_pm.create_project,
     "linear_create_issue": linear_pm.create_issue,

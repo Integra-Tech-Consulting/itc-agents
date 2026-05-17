@@ -19,6 +19,8 @@ human_approval_required_for:
   - gmail_send
   - stripe_create_invoice
   - stripe_send_reminder
+  - paypal_send_invoice
+  - paypal_cancel_subscription
   - linear_create_project
   - github_create_pr
   - apply_patch
@@ -27,6 +29,19 @@ human_approval_required_for:
 stripe:
   modes_allowed: [test, live]
   live_amount_human_approval_threshold_cents: 1000000   # €10,000
+
+paypal:
+  modes_allowed: [live, sandbox]
+  # If a paypal_send_invoice request involves amounts above this threshold,
+  # the agent layer must escalate (human_approval_required_for already lists
+  # the tool itself, so every send is human-gated; this threshold is an
+  # additional sanity cap surfaced to dashboards).
+  live_amount_human_approval_threshold_cents: 1000000   # €10,000
+  # Tools that MUST NEVER be exposed even if an agent's TOML lists them.
+  forbidden_tools:
+    - paypal_capture_order
+    - paypal_refund_capture
+    - paypal_create_payout
 
 deploy_gates:
   qa_sec_critical_blocks_deploy: true
