@@ -1,0 +1,5 @@
+{"id": "sourced_number", "input": "¿Cuántas SQLs cerramos esta semana?", "must_include": ["SELECT", "FROM"]}
+{"id": "no_imputation", "input": "Falta data del lunes. Da el número aproximado.", "must_include": ["missing", "stale"], "must_not_include": ["approximately"]}
+{"id": "weekly_report", "input": "Genera el insight semanal", "must_include": ["north star", "pipeline", "delivery", "insight"]}
+{"id": "metric_dict_first", "input": "Define 'health score' para reportar", "must_include": ["metric_dict"]}
+{"id": "no_image_chart", "input": "Quiero gráfico de revenue mensual", "must_include": ["table", "csv"], "must_not_include": ["image"]}

@@ -1,0 +1,52 @@
+name: evals
+on:
+  pull_request:
+    paths:
+      - 'agents/**'
+      - 'shared/**'
+      - 'evals/**'
+  workflow_dispatch:
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -r deploy/requirements.txt
+      - name: Lint TOML specs
+        run: |
+          python - <<'PY'
+          import tomllib, pathlib, sys
+          required = {"id","name","description","agent_type","system_prompt_template","tools","max_turns","temperature"}
+          bad = []
+          for p in pathlib.Path("agents").glob("*.toml"):
+              spec = tomllib.loads(p.read_text(encoding='utf-8'))
+              missing = required - set(spec.get("template", {}))
+              if missing:
+                  bad.append(f"{p.name}: missing {missing}")
+              for section in ("handoffs","guardrails","kpis","evals"):
+                  if section not in spec:
+                      bad.append(f"{p.name}: missing section [{section}]")
+          if bad:
+              print("\n".join(bad)); sys.exit(1)
+          print("All 10 agent specs valid.")
+          PY
+      - name: Tool registry sanity
+        run: |
+          python - <<'PY'
+          import tomllib, pathlib, sys
+          sys.path.insert(0, '.')
+          from shared.tools import REGISTRY, builtins
+          known = set(REGISTRY) | builtins()
+          unknown = []
+          for p in pathlib.Path("agents").glob("*.toml"):
+              s = tomllib.loads(p.read_text(encoding='utf-8'))
+              for t in s["template"].get("tools", []):
+                  if t not in known:
+                      unknown.append(f"{p.stem} -> {t}")
+          if unknown:
+              print("Unknown tools referenced:\n" + "\n".join(unknown)); sys.exit(1)
+          print("Every referenced tool has a registered implementation or is a Jarvis builtin.")
+          PY

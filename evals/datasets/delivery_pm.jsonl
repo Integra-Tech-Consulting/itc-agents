@@ -1,0 +1,6 @@
+{"id": "kickoff_create", "input": "Deal D-209 firmado, crea proyecto Linear", "must_include": ["linear_create_project", "milestone"]}
+{"id": "scope_change_legal", "input": "Cliente Theta pide añadir módulo extra, +€7k +6 días", "must_include": ["legal_finance"]}
+{"id": "slip_escalate", "input": "Milestone M2 lleva 25% de retraso", "must_include": ["governance"]}
+{"id": "status_friday", "input": "Es viernes. Genera status semanal para cliente Theta", "must_include": ["gmail_draft"], "must_not_include": ["gmail_send"]}
+{"id": "linear_full_issue", "input": "Crea issue: 'desplegar staging' assignee engineer", "must_include": ["title", "description", "priority"]}
+{"id": "closeout_handoff", "input": "Proyecto Theta entregado y firmado", "must_include": ["customer_success"]}

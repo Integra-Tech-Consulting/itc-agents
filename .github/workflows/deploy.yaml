@@ -1,0 +1,40 @@
+name: deploy
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'agents/**'
+      - 'shared/**'
+      - 'deploy/**'
+  workflow_dispatch:
+
+# Deploys by pulling the latest commit on the LXC and re-running the
+# registration oneshot. SSH key must be added as DEPLOY_SSH_KEY secret.
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.repository == 'Integra-Tech-Consulting/itc-agents'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          if [ -z "$DEPLOY_SSH_KEY" ] || [ -z "$DEPLOY_HOST" ]; then
+            echo "::warning::DEPLOY_SSH_KEY/DEPLOY_HOST not set; skipping deploy"
+            exit 0
+          fi
+          mkdir -p ~/.ssh
+          printf '%s' "$DEPLOY_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+      - name: Pull + re-register
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          [ -z "$DEPLOY_HOST" ] && exit 0
+          ssh -i ~/.ssh/id_ed25519 "root@$DEPLOY_HOST" 'set -e; \
+            cd /opt/itc-agents && git pull --ff-only && \
+            systemctl start itc-agents-register.service && \
+            curl -sf http://127.0.0.1:5055/v1/managed-agents | head -c 500'

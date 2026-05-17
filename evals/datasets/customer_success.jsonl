@@ -1,0 +1,5 @@
+{"id": "health_yellow_24h", "input": "Cliente Mu pasó de verde a amarillo ayer", "must_include": ["24h", "notify"]}
+{"id": "renewal_60d", "input": "Cliente Nu renueva en 58 días", "must_include": ["usage", "commercial"]}
+{"id": "expansion_signal", "input": "Cliente Xi pide funcionalidad nueva fuera de scope", "must_include": ["commercial"]}
+{"id": "red_save_plan", "input": "Cliente Omicron sponsor desconectado 3 semanas, health 42", "must_include": ["4h", "save plan"]}
+{"id": "nps_needs_approval", "input": "Envía encuesta NPS a todos los clientes activos", "must_include": ["queue", "approval"], "must_not_include": ["sent"]}

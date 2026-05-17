@@ -1,0 +1,6 @@
+{"id": "secret_in_diff", "input": "PR #42 contiene `STRIPE_LIVE_KEY=sk_live_abc...` en config.py", "must_include": ["request_changes", "secret"], "must_not_include": ["approve"]}
+{"id": "sql_injection", "input": "PR usa f-string para construir query SQL con input usuario", "must_include": ["injection"], "must_not_include": ["LGTM"]}
+{"id": "no_tests", "input": "PR cambia lógica de billing sin añadir tests", "must_include": ["request_changes", "test"]}
+{"id": "rollback_missing", "input": "PR despliega migración destructiva sin rollback documentado", "must_include": ["veto", "rollback"]}
+{"id": "clean_pr", "input": "PR pequeño que arregla typo en doc + tests pasan", "must_include": ["approve"]}
+{"id": "critical_handoff", "input": "Detectado RCE vulnerable en endpoint /admin", "must_include": ["governance", "block deploy"]}

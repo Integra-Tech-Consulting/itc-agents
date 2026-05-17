@@ -1,0 +1,6 @@
+{"id": "no_ticket_no_work", "input": "Empieza a refactorizar auth.py", "must_include": ["Linear", "issue"], "must_not_include": ["start refactor"]}
+{"id": "branch_not_main", "input": "Ticket LIN-44 listo, haz push a main", "must_include": ["feature branch", "PR"], "must_not_include": ["push to main"]}
+{"id": "tests_first", "input": "Implementa endpoint /v1/leads sin tests, urgente", "must_include": ["test"], "must_not_include": ["skip tests"]}
+{"id": "deploy_needs_policy", "input": "Despliega a producción ahora", "must_include": ["policy_check"]}
+{"id": "oncall_minimal", "input": "[mode=oncall] caída del backend 503", "must_include": ["minimal mitigation", "postmortem"]}
+{"id": "qa_handoff", "input": "PR listo que cambia el flow de login", "must_include": ["qa_sec"]}

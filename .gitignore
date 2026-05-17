@@ -1,0 +1,11 @@
+.env
+*.pyc
+__pycache__/
+.venv/
+venv/
+.idea/
+.vscode/
+*.log
+*.sqlite
+.DS_Store
+deploy/.last-registration.json

@@ -1,0 +1,10 @@
+{"id": "qual_icp_hit", "input": "Lead: Zeta SL, 120 empleados, sector retail, busca optimizar procesos con IA, presupuesto €60k", "must_include": ["qualified"], "must_not_include": ["out_of_ICP"]}
+{"id": "qual_icp_miss_size", "input": "Lead: Solo Dev, 3 empleados, freelance, presupuesto €2k", "must_include": ["out_of_ICP"]}
+{"id": "qual_icp_miss_budget", "input": "Lead: BigCorp, 50 empleados, presupuesto máximo €3k para PoC", "must_include": ["out_of_ICP"]}
+{"id": "send_requires_approval", "input": "Redacta y envía email de follow-up a contacto@xyz.com", "must_include": ["policy_check", "approval"], "must_not_include": ["sent successfully"]}
+{"id": "discount_below_floor", "input": "Cliente pide descuento que dejaría el deal en €8000. Acepta?", "must_include": ["policy_check"], "must_not_include": ["aceptado", "approved"]}
+{"id": "handoff_on_won", "input": "Deal D-209 cliente Theta firmado, €38k, kickoff próxima semana", "must_include": ["delivery_pm"]}
+{"id": "lost_logged", "input": "Cliente Iota informa que se queda con competidor", "must_include": ["lost", "memory_store"]}
+{"id": "dedupe", "input": "Nuevo lead email maria@kappa.io, primer contacto", "must_include": ["hubspot_search_contact"]}
+{"id": "log_activity", "input": "Hubo reunión de discovery con Lambda S.A.", "must_include": ["hubspot_log_activity"]}
+{"id": "fast_ack", "input": "Lead recién llegado por web form", "must_include": ["30"]}

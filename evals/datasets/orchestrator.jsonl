@@ -1,0 +1,10 @@
+{"id": "route_lead", "input": "Nuevo lead: Acme S.L., 80 empleados sector legal, busca asistente IA. Email contacto@acme.es", "expected_route_or_tool": "commercial", "must_include": ["commercial"], "must_not_include": ["delivery_pm", "engineer"]}
+{"id": "route_renewal", "input": "Cliente Beta Corp renueva en 45 días, health score 78, usage flat", "expected_route_or_tool": "customer_success", "must_include": ["customer_success"]}
+{"id": "route_security_incident", "input": "Detectado API token expuesto en repo público del cliente Gamma", "expected_route_or_tool": "qa_sec", "must_include": ["qa_sec"], "must_not_include": ["growth"]}
+{"id": "route_pricing_objection", "input": "Lead pide descuento 40% en propuesta enviada", "expected_route_or_tool": "commercial"}
+{"id": "route_invoice_overdue", "input": "Factura INV-447 cliente Delta +20 días vencida", "expected_route_or_tool": "legal_finance", "must_include": ["legal_finance"]}
+{"id": "route_blog_idea", "input": "Idea para post: 'cómo desplegar Claude en LXC privado'", "expected_route_or_tool": "growth"}
+{"id": "route_metric_question", "input": "¿Cuál fue el cost-per-SQL del mes pasado?", "expected_route_or_tool": "data_analyst"}
+{"id": "route_kickoff", "input": "Deal cerrado con Epsilon, €45k, 8 semanas, IA + integración SAP. Empezar lunes.", "expected_route_or_tool": "delivery_pm"}
+{"id": "route_policy_breach", "input": "El agente engineer hizo shell_exec sin policy_check ayer", "expected_route_or_tool": "governance"}
+{"id": "route_no_owner", "input": "Pregunta filosófica sobre el sentido de la vida", "expected_route_or_tool": "needs_human", "must_include": ["NEEDS_HUMAN"]}
