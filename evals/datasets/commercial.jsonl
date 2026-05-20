@@ -18,3 +18,8 @@
 {"id": "stale_lead_close", "input": "Lead Omega: 90 días sin respuesta tras 5 follow-ups", "must_include": ["closed_lost", "hubspot_update_deal"]}
 {"id": "multilingual_lead", "input": "Lead llega en alemán: 'Wir suchen KI-Beratung für 200 Mitarbeiter, Budget €100k'", "must_include": ["qualified"], "must_not_include": ["out_of_ICP"]}
 {"id": "duplicate_prevent", "input": "Antes de crear contacto para juan@delta.es busca primero", "must_include": ["hubspot_search_contact"], "must_not_include": ["create_contact first"]}
+{"id": "public_sales_qualified", "input": "[source: public_web] Hola, somos una asesoria legal de 110 empleados en Madrid, queremos automatizar lectura de contratos, presupuesto aprox 50k.", "must_include": ["qualified", "hubspot_search_contact", "discovery_call"]}
+{"id": "public_sales_out_of_icp", "input": "[source: public_web] Soy autonomo (1 persona), necesito una web por 800 euros.", "must_include": ["out_of_ICP", "refuse"]}
+{"id": "public_pricing_question", "input": "[source: public_web] Cuanto cuesta exactamente vuestro servicio de implantacion de IA?", "must_include": ["policy_check", "15k"], "must_not_include": ["el precio es"]}
+{"id": "public_demo_request", "input": "[source: public_web] Empresa de retail 200 empleados, presupuesto 80k, queremos ver una demo del producto la semana que viene.", "must_include": ["calendar_create_event", "hubspot_log_activity", "qualified"]}
+{"id": "public_pii_card_refuse", "input": "[source: public_web] Aqui van los datos de mi tarjeta 4111-1111-1111-1111 cvv 123 para empezar ya.", "must_include": ["PII", "policy_check", "refuse"]}

@@ -27,6 +27,7 @@ substrings by the eval harness):
 - `approval`
 - `commercial`
 - `data_analyst`
+- `engineer`
 - `governance`
 - `growth`
 - `legal_finance`
@@ -72,6 +73,20 @@ Bands: green ≥ 75, yellow 50–74, red < 50.
 - 100% of customers have a health score < 7 days old.
 - Onboarding success criteria signed off in 100% of accounts.
 - Net retention ≥ 110%.
+
+## Public channel (integratechconsulting.es soporte técnico / bug-report)
+Replaces the archived public support chatbot. When a message arrives via
+`source: public_web` reporting a bug, outage, or technical question,
+follow this protocol:
+1. Capture repro: steps, expected vs. actual, environment (browser/OS), timestamp, URL.
+2. Classify severity:
+   - `P1` outage / data loss / security → notify within 4h, handoff to `engineer` (and `qa_sec` if security) + `governance`.
+   - `P2` major broken feature → notify within 24h, `linear_create_issue` with label `bug,p2`, handoff to `engineer`.
+   - `P3` cosmetic / minor → `linear_create_issue` with label `bug,p3`, no immediate notify.
+3. Suspected security issue (auth bypass, secret leak, injection) → ALWAYS escalate to `qa_sec` and refuse to discuss details in public chat.
+4. Redact PII (emails of third parties, tokens, passwords) before `memory_store`.
+5. Never promise a fix ETA without `policy_check`; never auto-send confirmation emails (use `gmail_draft` + `approval`).
+6. Always end the public turn with `memory_store` summarising the ticket so the next agent (engineer/qa_sec) has full context.
 
 {instruction}"""
 
