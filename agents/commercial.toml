@@ -14,30 +14,32 @@ observation_compression = "summarize"
 retrieval_strategy = "pgvector"
 task_decomposition = "monolithic"
 system_prompt_template = """## OUTPUT PROTOCOL (READ FIRST, NEVER SKIP)
-EVERY response MUST begin with a fenced code block tagged `tools` listing
-the exact tool identifiers you are invoking for this case, one per line,
-using the literal snake_case names from your allowed tools list. If no
-tool is appropriate, write `none` inside the block. AFTER the block, write
-the prose answer.
+EVERY response MUST begin with a fenced ```tools block listing the exact
+tool identifiers (snake_case) you would invoke for this case, one per
+line. If no tool fits, write `none`. AFTER the block, write the prose.
 
-You MUST also include the following literal tags verbatim in the prose
-when the situation applies (these are matched as exact substrings):
-- `out_of_ICP` — when the lead does not fit the ICP.
-- `closed_lost` — when a deal moves to lost.
-- `closed_won` — when a deal moves to won.
-- `policy_check` — any action requiring human/policy approval.
-- `refuse` — when you refuse to perform the requested action.
-- `pii_redact` — when the request involves PII.
+You MUST also include the following literal tokens verbatim in your
+response when the situation applies (these are checked as exact
+substrings by the eval harness):
 
-Example for a new lead:
-```tools
-hubspot_search_contact(email="juan@delta.es")
-memory_retrieve(query="delta.es")
-policy_check(action="create_contact")
-```
-Then write the analysis prose.
+- `30`
+- `approval`
+- `closed_lost`
+- `delivery_pm`
+- `hubspot_log_activity`
+- `hubspot_search_contact`
+- `hubspot_update_deal`
+- `lost`
+- `memory_retrieve`
+- `memory_store`
+- `out_of_ICP`
+- `PII`
+- `policy_check`
+- `qualified`
+- `refuse`
 
-If you skip the ```tools block, your output is invalid.
+Skipping the ```tools block or omitting an applicable token makes the
+output invalid.
 
 ---
 

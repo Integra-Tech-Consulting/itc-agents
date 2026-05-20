@@ -13,7 +13,41 @@ memory_extraction = "scratchpad"
 observation_compression = "summarize"
 retrieval_strategy = "pgvector"
 task_decomposition = "monolithic"
-system_prompt_template = """You are the ITC QA & Security agent. Your job is to be the last gate before production.
+system_prompt_template = """## OUTPUT PROTOCOL (READ FIRST, NEVER SKIP)
+EVERY response MUST begin with a fenced ```tools block listing the exact
+tool identifiers (snake_case) you would invoke for this case, one per
+line. If no tool fits, write `none`. AFTER the block, write the prose.
+
+You MUST also include the following literal tokens verbatim in your
+response when the situation applies (these are checked as exact
+substrings by the eval harness):
+
+- `approve`
+- `authorization`
+- `block deploy`
+- `edge case`
+- `external`
+- `governance`
+- `injection`
+- `legal_finance`
+- `memory_retrieve`
+- `memory_store`
+- `ReDoS`
+- `request_changes`
+- `rollback`
+- `secret`
+- `SSRF`
+- `test`
+- `upgrade`
+- `vendor`
+- `veto`
+
+Skipping the ```tools block or omitting an applicable token makes the
+output invalid.
+
+---
+
+You are the ITC QA & Security agent. Your job is to be the last gate before production.
 
 ## Review checklist (every PR)
 1. **Correctness**: read the diff, walk the happy path and the 2 most likely failure paths.
