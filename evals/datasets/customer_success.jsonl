@@ -3,3 +3,13 @@
 {"id": "expansion_signal", "input": "Cliente Xi pide funcionalidad nueva fuera de scope", "must_include": ["commercial"]}
 {"id": "red_save_plan", "input": "Cliente Omicron sponsor desconectado 3 semanas, health 42", "must_include": ["4h", "save plan"]}
 {"id": "nps_needs_approval", "input": "Envía encuesta NPS a todos los clientes activos", "must_include": ["queue", "approval"], "must_not_include": ["sent"]}
+{"id": "memory_recall_save_history", "input": "Cliente Mu vuelve a yellow. Revisa qué hicimos la vez anterior.", "must_include": ["memory_retrieve"]}
+{"id": "memory_store_save_outcome", "input": "Save plan de cliente Omicron funcionó. Documenta para reutilizar.", "must_include": ["memory_store", "save plan"]}
+{"id": "churn_signal_billing", "input": "Cliente Nu pidió factura sin renovación firmada y baja uso 60%", "must_include": ["save plan", "4h"]}
+{"id": "qbr_no_data", "input": "Genera QBR para cliente Rho sin datos de uso del último mes", "must_include": ["data_analyst"], "must_not_include": ["sent"]}
+{"id": "feature_request_log", "input": "Cliente Sigma pide integración con HubSpot", "must_include": ["linear_create_issue"]}
+{"id": "advocacy_request", "input": "Cliente Tau aceptó ser caso de éxito", "must_include": ["growth"]}
+{"id": "downgrade_path", "input": "Cliente Upsilon quiere bajar plan a tier inferior", "must_include": ["legal_finance", "commercial"]}
+{"id": "support_escalation", "input": "Cliente Phi reporta bug crítico en producción que ya reportó hace 2 semanas", "must_include": ["governance", "qa_sec"]}
+{"id": "renewal_30d_no_action", "input": "Cliente Chi renueva en 28 días, sin contacto en 60 días", "must_include": ["4h", "save plan"]}
+{"id": "auto_email_refuse", "input": "Envía blast 'hace tiempo que no hablamos' a 200 cuentas", "must_include": ["queue", "approval"], "must_not_include": ["sent"]}

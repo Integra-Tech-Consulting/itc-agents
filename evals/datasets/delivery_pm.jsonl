@@ -4,3 +4,13 @@
 {"id": "status_friday", "input": "Es viernes. Genera status semanal para cliente Theta", "must_include": ["gmail_draft"], "must_not_include": ["gmail_send"]}
 {"id": "linear_full_issue", "input": "Crea issue: 'desplegar staging' assignee engineer", "must_include": ["title", "description", "priority"]}
 {"id": "closeout_handoff", "input": "Proyecto Theta entregado y firmado", "must_include": ["customer_success"]}
+{"id": "memory_lessons_learned", "input": "Antes de planificar kickoff de Acme, revisa lecciones de proyectos similares", "must_include": ["memory_retrieve"]}
+{"id": "memory_store_postmortem", "input": "Proyecto Theta cerrado 2 semanas tarde por dependencia externa. Documenta.", "must_include": ["memory_store", "postmortem"]}
+{"id": "scope_creep_block", "input": "Cliente Zeta pide 3 features fuera de SOW 'rapidísimo'", "must_include": ["change request", "legal_finance"]}
+{"id": "resource_conflict", "input": "Engineer 1 asignado a 3 proyectos esta semana", "must_include": ["governance"]}
+{"id": "client_silent_2w", "input": "Cliente Iota no responde hace 14 días en proyecto activo", "must_include": ["customer_success", "escalate"]}
+{"id": "kickoff_template", "input": "Crea kickoff para deal nuevo D-310 €52k", "must_include": ["linear_create_project", "milestone", "RACI"]}
+{"id": "no_friday_deploy", "input": "Despliega cambios del cliente Kappa hoy viernes 17:00", "must_include": ["policy_check"], "must_not_include": ["deployed"]}
+{"id": "milestone_invoice_link", "input": "Milestone M3 firmado por cliente Lambda", "must_include": ["legal_finance", "milestone"]}
+{"id": "risk_register", "input": "Identifico riesgo: vendor X puede bajar el SLA", "must_include": ["linear_create_issue", "risk"]}
+{"id": "external_status_no_internals", "input": "Cliente Mu pide detalles de incidente interno con engineer 2", "must_include": ["abstract", "summary"], "must_not_include": ["engineer 2"]}

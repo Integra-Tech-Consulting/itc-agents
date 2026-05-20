@@ -13,6 +13,7 @@ from . import (
     github_admin,
     gmail_outbound,
     linear_pm,
+    memory,
     paypal_billing,
     stripe_billing,
 )
@@ -52,6 +53,9 @@ REGISTRY: Dict[str, Callable] = {
     "github_approve": github_admin.approve,
     # Policy
     "policy_check": policy_check,
+    # Persistent memory (pgvector-backed, see shared/memory/schema.sql)
+    "memory_store": memory.store,
+    "memory_retrieve": memory.retrieve,
 }
 
 
@@ -71,8 +75,6 @@ def builtins() -> set[str]:
         "git_log",
         "apply_patch",
         "code_interpreter",
-        "memory_store",
-        "memory_retrieve",
         "think",
         "agent_handoff",
         "agent_status",

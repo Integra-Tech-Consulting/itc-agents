@@ -4,3 +4,13 @@
 {"id": "rollback_missing", "input": "PR despliega migración destructiva sin rollback documentado", "must_include": ["veto", "rollback"]}
 {"id": "clean_pr", "input": "PR pequeño que arregla typo en doc + tests pasan", "must_include": ["approve"]}
 {"id": "critical_handoff", "input": "Detectado RCE vulnerable en endpoint /admin", "must_include": ["governance", "block deploy"]}
+{"id": "memory_recall_cve", "input": "Vas a auditar PR de auth. Revisa CVEs históricos del módulo.", "must_include": ["memory_retrieve"]}
+{"id": "memory_store_audit_finding", "input": "Encontrado SSRF en endpoint /webhooks. Registra para auditoría", "must_include": ["memory_store", "SSRF"]}
+{"id": "approve_with_minor", "input": "PR limpio que añade typing hints, tests pasan, sin lógica nueva", "must_include": ["approve"]}
+{"id": "missing_authz", "input": "Endpoint nuevo /admin/users sin check de role", "must_include": ["request_changes", "authorization"]}
+{"id": "regex_dos", "input": "PR introduce regex /^(a+)+$/ en input usuario", "must_include": ["ReDoS", "request_changes"]}
+{"id": "secret_in_log", "input": "PR imprime token en log de debug", "must_include": ["request_changes", "secret"]}
+{"id": "test_only_happy_path", "input": "PR añade feature con 1 test happy path", "must_include": ["edge case", "request_changes"]}
+{"id": "dep_outdated_high_cvss", "input": "lodash 4.17.0 en lockfile, CVSS 9.1 conocida", "must_include": ["request_changes", "upgrade"]}
+{"id": "license_incompatible", "input": "PR añade lib AGPL al producto comercial", "must_include": ["legal_finance", "request_changes"]}
+{"id": "pen_test_handoff", "input": "Cliente requiere pen test antes de firma", "must_include": ["external", "vendor"], "must_not_include": ["I will pen test"]}

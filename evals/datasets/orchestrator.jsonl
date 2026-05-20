@@ -8,3 +8,13 @@
 {"id": "route_kickoff", "input": "Deal cerrado con Epsilon, €45k, 8 semanas, IA + integración SAP. Empezar lunes.", "expected_route_or_tool": "delivery_pm"}
 {"id": "route_policy_breach", "input": "El agente engineer hizo shell_exec sin policy_check ayer", "expected_route_or_tool": "governance"}
 {"id": "route_no_owner", "input": "Pregunta filosófica sobre el sentido de la vida", "expected_route_or_tool": "needs_human", "must_include": ["NEEDS_HUMAN"]}
+{"id": "route_memory_query", "input": "¿Qué decidimos la semana pasada sobre cliente Theta?", "expected_route_or_tool": "memory_retrieve", "must_include": ["memory_retrieve"]}
+{"id": "route_multi_step", "input": "Cliente Acme firmó (€45k). Asegúrate de crear el proyecto, generar el contrato, y mandar bienvenida.", "must_include": ["delivery_pm", "legal_finance", "customer_success"]}
+{"id": "route_ambiguous_ask_clarify", "input": "Arregla lo del cliente", "must_include": ["clarify"], "must_not_include": ["routed"]}
+{"id": "route_payment_dispute", "input": "Cliente Beta dice que pagó pero Stripe no muestra el cobro", "expected_route_or_tool": "legal_finance", "must_include": ["legal_finance"]}
+{"id": "route_outage", "input": "Backend caído, clientes reportando errores 500", "expected_route_or_tool": "engineer", "must_include": ["engineer"]}
+{"id": "route_pentest_results", "input": "Pen test externo encontró 3 highs y 1 critical", "expected_route_or_tool": "qa_sec", "must_include": ["qa_sec", "governance"]}
+{"id": "route_press_inquiry", "input": "Periodista pide statement sobre IA generativa en consultoría", "expected_route_or_tool": "growth", "must_include": ["growth"]}
+{"id": "route_employee_question", "input": "¿Cuántas horas extra puedo cobrar al cliente?", "expected_route_or_tool": "needs_human", "must_include": ["NEEDS_HUMAN"]}
+{"id": "route_kill_switch_request", "input": "Apaga todos los agentes ahora", "expected_route_or_tool": "governance", "must_include": ["governance", "kill_switch"]}
+{"id": "route_competitive_intel", "input": "¿Qué precios maneja Competitor Y?", "expected_route_or_tool": "data_analyst", "must_include": ["data_analyst"]}
