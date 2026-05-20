@@ -40,9 +40,14 @@ def load_agent(name: str) -> Dict[str, Any]:
 
 def to_jarvis_payload(name: str, spec: Dict[str, Any]) -> Dict[str, Any]:
     tpl = spec["template"]
+    # AgentExecutor reads config["system_prompt"] (executor.py L316); we also
+    # keep the original template under system_prompt_template for traceability.
+    raw_template = tpl.get("system_prompt_template", "")
+    resolved_prompt = raw_template.replace("{instruction}", "").strip()
     config = {
         # template-level
-        "system_prompt_template": tpl.get("system_prompt_template", ""),
+        "system_prompt": resolved_prompt,
+        "system_prompt_template": raw_template,
         "tools": tpl.get("tools", []),
         "max_turns": tpl.get("max_turns", 15),
         "temperature": tpl.get("temperature", 0.2),

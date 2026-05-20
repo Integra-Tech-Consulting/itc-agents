@@ -44,14 +44,32 @@ def find_agent_id(name: str) -> str | None:
     return None
 
 
-def send_to_agent(agent_id: str, message: str) -> Dict[str, Any]:
-    r = httpx.post(
-        f"{JARVIS_URL}/v1/managed-agents/{agent_id}/messages",
-        json={"content": message, "mode": "queued", "stream": False},
-        timeout=120,
-    )
+def send_to_agent(agent_id: str, message: str, *, poll_timeout: float = 300.0) -> Dict[str, Any]:
+    """Post in immediate mode and poll until the agent replies."""
+    url = f"{JARVIS_URL}/v1/managed-agents/{agent_id}/messages"
+    r = httpx.post(url, json={"content": message, "mode": "immediate", "stream": False}, timeout=30)
     r.raise_for_status()
-    return r.json()
+    sent = r.json()
+    sent_at = float(sent.get("created_at") or time.time())
+    sent_id = sent.get("id")
+
+    deadline = time.time() + poll_timeout
+    while time.time() < deadline:
+        time.sleep(3.0)
+        try:
+            lr = httpx.get(url, timeout=10)
+            lr.raise_for_status()
+            msgs = lr.json().get("messages", [])
+        except Exception:
+            continue
+        for m in msgs:
+            if (
+                m.get("direction") == "agent_to_user"
+                and m.get("id") != sent_id
+                and float(m.get("created_at") or 0) > sent_at
+            ):
+                return m
+    return {"id": sent_id, "status": "timeout", "content": "", "_timeout": True}
 
 
 def grade_case(case: Dict[str, Any], response_text: str) -> bool:
@@ -83,13 +101,16 @@ def run_agent(agent: str, threshold: float = 0.85) -> Dict[str, Any]:
     for c in cases:
         try:
             resp = send_to_agent(agent_id, c["input"])
-            text = json.dumps(resp)
+            text = resp.get("content") or json.dumps(resp)
             ok = grade_case(c, text)
         except Exception as e:
             ok = False
             text = f"ERROR: {e}"
         passed += int(ok)
-        report.append(f"- {'PASS' if ok else 'FAIL'} {c['id']}: {c['input'][:60]}...")
+        verdict = "PASS" if ok else "FAIL"
+        report.append(f"- {verdict} {c['id']}: {c['input'][:80]}")
+        report.append(f"    reply: {text[:400].replace(chr(10), ' / ')}")
+        print(f"  [{agent}] {verdict} {c['id']}", flush=True)
 
     rate = passed / len(cases)
     result = {
@@ -102,6 +123,12 @@ def run_agent(agent: str, threshold: float = 0.85) -> Dict[str, Any]:
         "report": "\n".join(report),
     }
     print(json.dumps({k: v for k, v in result.items() if k != "report"}, indent=2))
+    out_dir = ROOT / "results"
+    out_dir.mkdir(exist_ok=True)
+    (out_dir / f"{agent}.txt").write_text(
+        f"agent: {agent}\npassed: {passed}/{len(cases)} ({rate:.0%})\n\n" + "\n".join(report),
+        encoding="utf-8",
+    )
     return result
 
 
